@@ -1,0 +1,152 @@
+---
+title: "Activity 8: Computational Thinking 2"
+subtitle: "Joshua Holt and Sora Feeney"
+format: pdf
+editor: visual
+---
+
+# 1. Conditionals
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+## Q1.1)
+
+```{r}
+x <- 11
+
+# Check if the value of x is greater than 10
+if(x > 10)
+{ 
+  print(paste(x, "is greater than 10")) 
+} else
+{ 
+  print(paste(x, "is less than or equal to 10")) 
+}
+```
+
+### The output message states "11 is greater than 10"
+
+## Q1.2)
+
+```{r}
+y <- c(-2, 42, 0, 10)
+
+for (i in 1:length(y)) {
+  if (y[i] < 0) {
+    print("value is less than 0")
+  } else {
+    if (y[i] == 0) {
+      print("value is 0!!!")
+    } else {
+      # don't need if (y[i]>0) because that's the only option left
+      print("value is greater than 0")
+    }
+  }
+  
+}
+```
+
+## Q1.3)
+
+```{r}
+library(lterdatasampler)
+library(tidyverse)
+```
+
+```{r}
+?nwt_pikas
+```
+
+### Stress was measured by observing the amount of glucocorticoid metabolite found in pika feces. The stress variable is "concentration_pg_m" which denotes glucocorticoid metabolite (GCM) concentration in picogram GCM/gram dry pika feces.
+
+## Q1.4)
+
+### A row represents an individual pika poop
+
+## Q1.5)
+
+```{r}
+nwt_pikas_categ <- nwt_pikas %>% 
+  # Call the new column stress_category
+  mutate(stress_category = case_when(
+    # When the value is > 5000, make the new column's value "Stressed!!!!"
+    concentration_pg_g > 5000 ~ "Stressed!!!!!!",
+    # Otherwise, make the new column's value "Chill"
+    .default = "Chill"
+  ))
+
+# Check out the first 6 rows, but remove the utm columns just for visibility
+head(nwt_pikas_categ %>% select(-c(utm_easting, utm_northing)))
+
+
+# make scatterplot with color
+nwt_pikas_categ |> 
+  ggplot(aes(x ="Placeholder",
+             y = concentration_pg_g,
+      #color mapped to stress category
+             color = stress_category)) +
+  geom_jitter(width = 0.1)
+```
+
+# 2. **DIY a for loop and an if else statement / case when**
+
+## Q2.1) 
+
+### We chose to use the iris data set.
+
+## Q2.2)
+
+### We are using the Iris data set to find the median value for each numeric column. In this data set, the columns represent different measurements/variables of flowers. This is taking into account all flower species.
+
+## Q2.3)
+
+```{r}
+#Get the column names of the dataframe, store in a vector "names"
+  names <- colnames(iris)
+
+# Creating for loop
+for (i in 1:4) {
+  
+  # Print out the "i"th element of the vector to print alongside the output
+  print(names[i])
+  
+  # This prints out column i
+  print(median(iris[,i]))
+}
+
+```
+
+## Q2.4)
+
+### We are comparing all values in the Sepal Length column to the calculated median of Sepal Length across all individuals. Then print out the final conclusion of whether the values in each cell are less than, equal to, or greater than the median of Sepal Length.
+
+## Q2.5)
+
+```{r}
+#Redifing data frame to only include Sepal Length column
+S.L.Med <- iris$Sepal.Length
+
+#For 1 through the length of the vector "S.L.Med"
+for (i in 1:length(S.L.Med)){
+  #Check if the cell value is NA
+  if(!is.na(S.L.Med[i])){
+    #Check the value using nested if-else statements
+    if(S.L.Med[i] < 5.8){
+      #If the element is less than the previously calculated median
+      print("Sepal Length is less than the median (5.8 cm)")
+    } else {
+      if (S.L.Med[i] == 5.8) {
+        #If the element is exactly equal to previously calculated median 
+        print("Sepal Length is equal to the median (5.8 cm)")
+      } else {
+        #If the element is exactly greater to previously calculated median
+        #Don't need if statement because it is the only option left 
+        print("Sepal Length is greater than the median (5.8 cm)")
+      }
+    }
+  }
+}
+```
